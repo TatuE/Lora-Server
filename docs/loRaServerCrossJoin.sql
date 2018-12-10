@@ -1,0 +1,6 @@
+SELECT u.User_id, u.Email, u.Phone, e.First_name, e.Last_name, e.Business_unit_id, b.Name FROM DM_Users as u CROSS JOIN DM_Employees AS e ON u.User_id=e.Employee_id CROSS JOIN DM_Business_units AS b on e.Business_unit_id=b.Business_unit_id WHERE u.In_use=1;
+SELECT dp.device_placement_id, dp.location_id, dp.device_id, dp.placement_date, l.name, l.location, d.uid FROM LT_Device_placements AS dp CROSS JOIN LT_Locations AS l ON dp.location_id=l.location_id CROSS JOIN LT_Devices AS d ON dp.device_id=d.device_id WHERE dp.in_use=1;
+
+SELECT dp.device_placement_id, dp.location_id, dp.device_id, dp.placement_date, l.name, l.location, d.uid FROM LT_Device_placements AS dp CROSS JOIN LT_Locations AS l ON dp.location_id=l.location_id CROSS JOIN LT_Devices AS d ON dp.device_id=d.device_id WHERE dp.in_use=1 AND l.name LIKE ? AND l.location LIKE ? AND d.uid LIKE?;
+
+SELECT sd.sensor_data_id, sd.sensor_data, sd.sensor_data_time, dp.device_placement_id, l.location, l.name FROM LT_Sensor_data AS sd CROSS JOIN LT_Device_placements AS dp ON sd.device_placement_id=dp.device_placement_id CROSS JOIN LT_Locations AS l ON dp.location_id=l.location_id ORDER BY 3 desc;

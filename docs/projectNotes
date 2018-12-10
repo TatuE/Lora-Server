@@ -1,0 +1,10 @@
+Check list:
+
+	Dao_Device:
+		getDevice:
+			Is in_use needed in device object? 
+
+	In Device and Location class, 'in_use' indicates that the object is in use in a device/location combination.
+	To indicate that one of the objects is in service/out of service status, use activation_date/deactivation_date variables with NULL values.
+
+Every table must have a specific number prefix in autonumbering (100000,200000, ect). 
