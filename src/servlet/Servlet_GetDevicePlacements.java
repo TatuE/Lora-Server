@@ -58,34 +58,29 @@ public class Servlet_GetDevicePlacements extends HttpServlet {
 			String sFrom = dc.dateFormat(request.getParameter("from"));
 			String sTo = dc.dateFormat(request.getParameter("to"));
 			
-			if(vc.ifValid(locationName)) {
-				locationName="";
+			if(vc.ifValid(locationName)||vc.ifValid(location)||vc.ifValid(uid)) {
+				response.sendRedirect("devicePlacementList.jsp?info=dpE1");
+			}else {			
+				if(sFrom.equals("")) {
+					from=null;
+				}else {
+					from = Date.valueOf(sFrom);
+				}
+				
+				if(sTo.equals("")) {
+					to=null;
+				}else {
+					to=Date.valueOf(sTo);
+				}
+				
+				ArrayList<DevicePlacement> devicePlacements = dao.getDevicePlacements(locationName, location, uid, from, to);
+				String returnValue="search";
+				request.setAttribute("returnValue", returnValue);
+				request.setAttribute("devicePlacements", devicePlacements);
+				String jsp = "/devicePlacementList.jsp";
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(jsp);
+				dispatcher.forward(request, response);
 			}
-			if(vc.ifValid(location)) {
-				location="";
-			}
-			if(vc.ifValid(uid)) {
-				uid="";
-			}
-			if(sFrom.equals("")) {
-				from=null;
-			}else {
-				from = Date.valueOf(sFrom);
-			}
-			
-			if(sTo.equals("")) {
-				to=null;
-			}else {
-				to=Date.valueOf(sTo);
-			}
-			
-			ArrayList<DevicePlacement> devicePlacements = dao.getDevicePlacements(locationName, location, uid, from, to);
-			String returnValue="search";
-			request.setAttribute("returnValue", returnValue);
-			request.setAttribute("devicePlacements", devicePlacements);
-			String jsp = "/devicePlacementList.jsp";
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(jsp);
-			dispatcher.forward(request, response);			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		

@@ -21,8 +21,31 @@
 	<title>Lora-Tocsin</title>
 	<style>
 		body{
-			  background-color:#535559;
-		}	
+			  background-color:white;
+		}
+		
+		.overlay {
+			padding: 20px;		
+		}
+		
+		.scrollOuter{		
+			overflow: hidden;
+			padding: 5px;
+					
+		}
+
+		.scrollInner {		
+			overflow-y: auto;
+			
+		}
+		
+		.sensorTD {
+			height: 400px;
+		}
+		
+		.generalTD {
+			height: 260px;
+		}
 	</style>
 </head>
 <body>

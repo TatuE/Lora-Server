@@ -3,7 +3,6 @@ package servlet;
 import java.io.IOException;
 import java.sql.Date;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,14 +34,14 @@ public class Servlet_AlterDevicePlacement extends HttpServlet {
 		DateConverter dc = new DateConverter();
 		
 		try {
-		devicePlacement.setDevice_id(Integer.parseInt(request.getParameter("device")));
-		devicePlacement.setLocation_id(Integer.parseInt(request.getParameter("location")));
-		devicePlacement.setPlacement_date(Date.valueOf(dc.dateFormat(request.getParameter("placement_date"))));
-		devicePlacement.setDevice_placement_id(Integer.parseInt(request.getParameter("device_placement_id")));
-		dao.updateDevicePlacement(devicePlacement);
-		response.sendRedirect("Servlet_GetDevicePlacements");
+			devicePlacement.setDevice_id(Integer.parseInt(request.getParameter("device")));			
+			devicePlacement.setLocation_id(Integer.parseInt(request.getParameter("location")));			
+			devicePlacement.setPlacement_date(Date.valueOf(dc.dateFormat(request.getParameter("placement_date"))));			
+			devicePlacement.setDevice_placement_id(Integer.parseInt(request.getParameter("device_placement_id")));			
+			dao.updateDevicePlacement(devicePlacement);
+			response.sendRedirect("devicePlacementList.jsp?info=dpIal1");
 		}catch (Exception e) {
-			System.out.println("error");
+			response.sendRedirect("devicePlacementList.jsp?info=dpEal1");
 		}
 	}
 

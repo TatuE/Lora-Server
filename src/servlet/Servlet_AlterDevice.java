@@ -40,16 +40,16 @@ public class Servlet_AlterDevice extends HttpServlet {
 		try {
 		String uid = request.getParameter("uid");	
 		if(vc.ifValid(uid)) {
-			response.sendRedirect("Servlet_GetDevices");
-			// and error?
+			response.sendRedirect("deviceList.jsp?info=dE1");
+		}else {
+			device.setUid(uid);		
+			device.setDeployment_date(Date.valueOf(dc.dateFormat(request.getParameter("deployment_date"))));
+			device.setDevice_id(Integer.parseInt(request.getParameter("device_id")));
+			dao.updateDevice(device);
+			response.sendRedirect("deviceList.jsp?info=dIal1");	
 		}
-		device.setUid(uid);		
-		device.setDeployment_date(Date.valueOf(dc.dateFormat(request.getParameter("deployment_date"))));
-		device.setDevice_id(Integer.parseInt(request.getParameter("device_id")));
-		dao.updateDevice(device);
-		response.sendRedirect("Servlet_GetDevices");
 		}catch (Exception e) {
-			System.out.println("error");
+			response.sendRedirect("deviceList.jsp?info=dEal1");	
 		}	
 	}
 }

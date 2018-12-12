@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 
 import dao.Dao_SignIn;
+import helper.ValueChecker;
 
 @WebServlet("/Servlet_SignIn")
 public class Servlet_SignIn extends HttpServlet {
@@ -40,24 +41,29 @@ public class Servlet_SignIn extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Servlet_SignIn.doPost()");
 		Dao_SignIn dao = new Dao_SignIn();
+		ValueChecker vc = new ValueChecker();
 		String user="";
 		try {
 			String user_name = request.getParameter("user_name");
 			String psswd = request.getParameter("psswd");
-			user = dao.signIn(user_name, psswd);
-			if(user.length()>0) {
-				HttpSession session = request.getSession(true);
-				session.setAttribute("User", user);				
-				if(session.getAttribute("targetPage")!=null) {
-					response.sendRedirect(session.getAttribute("targetPage").toString());
+			if(vc.ifValid(user_name)||vc.ifValid(psswd)) {
+				response.sendRedirect("signIn.jsp?info=siE3");
+			}else {
+				user = dao.signIn(user_name, psswd);
+				if(user.length()>0) {
+					HttpSession session = request.getSession(true);
+					session.setAttribute("User", user);				
+					if(session.getAttribute("targetPage")!=null) {						
+						response.sendRedirect(session.getAttribute("targetPage").toString());
+					}else {
+						response.sendRedirect("Servlet_GetSensorData");
+					}			
 				}else {
-					response.sendRedirect("Servlet_GetSensorData");
-				}			
+					response.sendRedirect("signIn.jsp?info=siE1");
+				}
 			}
-			
 		} catch (Exception e) {
-			response.sendRedirect("index.jsp");
+			response.sendRedirect("signIn.jsp?info=siE2");
 		}
 	}
-
 }

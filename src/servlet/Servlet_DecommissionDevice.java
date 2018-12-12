@@ -28,18 +28,22 @@ public class Servlet_DecommissionDevice extends HttpServlet {
 		Dao_Device daoD = new Dao_Device();
 		Dao_Location daoL = new Dao_Location();
 		
-		DevicePlacement devicePlacement = daoDp.getDevicePlacement("device_id", id);
-		
-		if(devicePlacement.getDevice_id()==id) {
-			if(daoDp.setInUseFalse(devicePlacement.getDevice_placement_id())&&daoD.decommissionDevice(id)&&daoL.setInUse(devicePlacement.getLocation_id(), 0)) {
+		try {
+			DevicePlacement devicePlacement = daoDp.getDevicePlacement("device_id", id);
+			
+			if(devicePlacement.getDevice_id()==id) {
+				if(daoDp.setInUseFalse(devicePlacement.getDevice_placement_id())&&daoD.decommissionDevice(id)&&daoL.setInUse(devicePlacement.getLocation_id(), 0)) {
+					response.sendRedirect("Servlet_GetDevices");
+				}else {
+					System.out.println("error");
+				}			
+			}else if(daoD.decommissionDevice(id)) {
 				response.sendRedirect("Servlet_GetDevices");
 			}else {
 				System.out.println("error");
-			}			
-		}else if(daoD.decommissionDevice(id)) {
-			response.sendRedirect("Servlet_GetDevices");
-		}else {
-			System.out.println("error");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

@@ -29,7 +29,7 @@ public class SensorData {
 
 	public int getSensor_data() {
 		return sensor_data;
-	}
+	}	
 
 	public void setSensor_data(int sensor_data) {
 		this.sensor_data = sensor_data;

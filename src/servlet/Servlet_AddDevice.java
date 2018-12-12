@@ -42,10 +42,10 @@ public class Servlet_AddDevice extends HttpServlet {
 				device.setUid(request.getParameter("uid"));		
 				device.setDeployment_date(Date.valueOf(dc.dateFormat(request.getParameter("deployment_date"))));		
 				dao.newDevice(device);		
-				response.sendRedirect("Servlet_GetDevices");
+				response.sendRedirect("deviceList.jsp?info=dIad1");	
 			}
 		}catch (Exception e) {
-			System.out.println("error");
+			response.sendRedirect("deviceList.jsp?info=dEad1");	
 		}
 	}
 }

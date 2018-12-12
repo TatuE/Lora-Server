@@ -68,42 +68,36 @@ public class Servlet_GetLocations extends HttpServlet {
 			String sFrom = dc.dateFormat(request.getParameter("from"));
 			String sTo = dc.dateFormat(request.getParameter("to"));
 			
-			if(vc.ifValid(name)) {
-				name="";
-				//or error
-			}
-			
-			if(vc.ifValid(location)) {
-				location="";
-				// or error;
-			}
-			
-			if(sFrom.equals("")) {
-				from=null;
-			}else {
-				from = Date.valueOf(sFrom);
-			}
-			
-			if(sTo.equals("")) {
-				to=null;
-			}else {
-				to=Date.valueOf(sTo);
-			}			
-			ArrayList<Location> locations =	dao.getLocations(name, location, from, to);
-			for(int i=0;i<locations.size();i++) {
-				if(locations.get(i).getActivation_date()==null) {
-					deactivatedLocations.add(locations.get(i));
-				}else if(locations.get(i).getDeactivation_date()==null) {
-					activatedLocations.add(locations.get(i));
+			if(vc.ifValid(name)||vc.ifValid(location)) {
+				response.sendRedirect("locationList.jsp?info=lE1");
+			}else {			
+				if(sFrom.equals("")) {
+					from=null;
+				}else {
+					from = Date.valueOf(sFrom);
 				}
+				
+				if(sTo.equals("")) {
+					to=null;
+				}else {
+					to=Date.valueOf(sTo);
+				}			
+				ArrayList<Location> locations =	dao.getLocations(name, location, from, to);
+				for(int i=0;i<locations.size();i++) {
+					if(locations.get(i).getActivation_date()==null) {
+						deactivatedLocations.add(locations.get(i));
+					}else if(locations.get(i).getDeactivation_date()==null) {
+						activatedLocations.add(locations.get(i));
+					}
+				}
+				String returnValue="search";
+				request.setAttribute("returnValue", returnValue);
+				request.setAttribute("activatedLocations", activatedLocations);
+				request.setAttribute("deactivatedLocations", deactivatedLocations);
+				String jps = "/locationList.jsp";
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(jps);
+				dispatcher.forward(request, response);
 			}
-			String returnValue="search";
-			request.setAttribute("returnValue", returnValue);
-			request.setAttribute("activatedLocations", activatedLocations);
-			request.setAttribute("deactivatedLocations", deactivatedLocations);
-			String jps = "/locationList.jsp";
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(jps);
-			dispatcher.forward(request, response);			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		

@@ -9,7 +9,7 @@ public class ValueChecker {
 	
 	public boolean ifValid(String value) {
 		boolean returnValue = false;
-		String[] falseValues = {"<","'",">"};
+		String[] falseValues = {"<","'",">","&"};
 		
 		for(int i=0;i<falseValues.length;i++) {
 			if(value.contains(falseValues[i])) {

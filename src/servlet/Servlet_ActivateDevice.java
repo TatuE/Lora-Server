@@ -22,11 +22,15 @@ public class Servlet_ActivateDevice extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Servlet_ActivateDevice.doGet()");
-		int id = Integer.parseInt(request.getParameter("device_id"));
-		Dao_Device dao = new Dao_Device();
-		if(dao.activateDevice(id)) {
-			response.sendRedirect("Servlet_GetDevices");
-		}	
+		try {
+			int id = Integer.parseInt(request.getParameter("device_id"));
+			Dao_Device dao = new Dao_Device();
+			if(dao.activateDevice(id)) {
+				response.sendRedirect("Servlet_GetDevices");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

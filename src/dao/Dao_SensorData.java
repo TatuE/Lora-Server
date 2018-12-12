@@ -32,7 +32,7 @@ public class Dao_SensorData extends Dao {
 		
 		sql="SELECT sd.sensor_data_id, sd.sensor_data, sd.sensor_data_time, dp.device_placement_id, l.location, l.name "
 				+ "FROM LT_Sensor_data AS sd CROSS JOIN LT_Device_placements AS dp ON sd.device_placement_id=dp.device_placement_id CROSS JOIN LT_Locations AS l ON dp.location_id=l.location_id "
-				+ "WHERE dp.in_use=1 ORDER BY 3 desc;";
+				+ "WHERE dp.in_use=1 ORDER BY 3 desc";
 		
 		try {
 			con=connect();
@@ -62,35 +62,54 @@ public class Dao_SensorData extends Dao {
 		return sensorDataList;		
 	}
 	
-	public ArrayList<SensorData> getSensorData(int id){
-		ArrayList<SensorData> sensorDataList = new ArrayList<>();			
-		
+	public ArrayList<SensorData> getSensorData(String locationName, String location, int status){
+		ArrayList<SensorData> sensorDataList = new ArrayList<>();
+			
 		sql="SELECT sd.sensor_data_id, sd.sensor_data, sd.sensor_data_time, dp.device_placement_id, l.location, l.name "
 				+ "FROM LT_Sensor_data AS sd CROSS JOIN LT_Device_placements AS dp ON sd.device_placement_id=dp.device_placement_id CROSS JOIN LT_Locations AS l ON dp.location_id=l.location_id "
-				+ "WHERE dp.device_placement_id=? ORDER BY 3 desc;";
-		
+				+ "WHERE l.name LIKE ? AND l.location LIKE ? AND dp.in_use=1 ORDER BY 3 desc";
 		try {
 			con=connect();
 			if(con!=null) {
 				prepStmt=con.prepareStatement(sql);
-				prepStmt.setInt(1, id);
+				prepStmt.setString(1, "%"+locationName+"%");
+				prepStmt.setString(2, "%"+location+"%");
 				rs=prepStmt.executeQuery();
 				if(rs!=null) {
 					while(rs.next()) {						
 						SensorData sensorData = new SensorData();
 						sensorData.setSensor_data_id(rs.getInt("sd.sensor_data_id"));
-						sensorData.setSensor_data(rs.getInt("sd.sensor_data"));
-						sensorData.setSensor_data_time(rs.getTimestamp("sd.sensor_data_time"));
+						sensorData.setSensor_data(rs.getInt("sd.sensor_data"));						
+						sensorData.setSensor_data_time(rs.getTimestamp("sd.sensor_data_time"));						
 						sensorData.setDevice_placement_id(rs.getInt("dp.device_placement_id"));
 						sensorData.setLocation(rs.getString("l.location"));
-						sensorData.setLocationName(rs.getString("l.name"));						
-						sensorDataList.add(sensorData);																	
+						sensorData.setLocationName(rs.getString("l.name"));	
+						if(sensorDataList.isEmpty()) {
+							sensorDataList.add(sensorData);		
+						}else if(sensorDataList.get(sensorDataList.size()-1).getDevice_placement_id()!=sensorData.getDevice_placement_id()) {
+							sensorDataList.add(sensorData);
+						}																						
 					}
 				}
+				con.close();
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();
-		}		
+		}
+		if(status==1) {
+			for(int i=0;i<sensorDataList.size();i++) {
+				if(sensorDataList.get(i).getSensor_data()==0) {
+					sensorDataList.remove(i);
+				}
+			}
+		}else if (status==0) {
+			for(int i=0;i<sensorDataList.size();i++) {
+				if(sensorDataList.get(i).getSensor_data()==1) {
+					sensorDataList.remove(i);
+				}
+			}
+		}
+		
 		return sensorDataList;		
 	}
 	

@@ -21,10 +21,14 @@ public class Servlet_ActivateLocation extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Servlet_ActivateLocation.doGet()");
-		int id = Integer.parseInt(request.getParameter("location_id"));
-		Dao_Location dao = new Dao_Location();
-		if(dao.activateLocation(id)) {
-			response.sendRedirect("Servlet_GetLocations");
+		try {
+			int id = Integer.parseInt(request.getParameter("location_id"));
+			Dao_Location dao = new Dao_Location();
+			if(dao.activateLocation(id)) {
+				response.sendRedirect("Servlet_GetLocations");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

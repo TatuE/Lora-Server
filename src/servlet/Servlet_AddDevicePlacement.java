@@ -33,14 +33,14 @@ public class Servlet_AddDevicePlacement extends HttpServlet {
 		Dao_DevicePlacement dao = new Dao_DevicePlacement();
 		DateConverter dc = new DateConverter();
 		
-		try {
-		devicePlacement.setLocation_id(Integer.parseInt(request.getParameter("location")));
-		devicePlacement.setDevice_id(Integer.parseInt(request.getParameter("device")));
-		devicePlacement.setPlacement_date(Date.valueOf(dc.dateFormat(request.getParameter("placement_date"))));		
-		dao.newDevicePlacement(devicePlacement);
-		response.sendRedirect("Servlet_GetDevicePlacements");
+		try {			
+			devicePlacement.setLocation_id(Integer.parseInt(request.getParameter("location")));
+			devicePlacement.setDevice_id(Integer.parseInt(request.getParameter("device")));
+			devicePlacement.setPlacement_date(Date.valueOf(dc.dateFormat(request.getParameter("placement_date"))));		
+			dao.newDevicePlacement(devicePlacement);
+			response.sendRedirect("devicePlacementList.jsp?info=dpIad1");	
 		}catch (Exception e) {
-			System.out.println("error");
+			response.sendRedirect("devicePlacementList.jsp?info=dpEad1");
 		}		
 	}
 }

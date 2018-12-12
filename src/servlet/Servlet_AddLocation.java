@@ -38,16 +38,16 @@ public class Servlet_AddLocation extends HttpServlet {
 			String name = request.getParameter("name");
 			String locationName = request.getParameter("location");
 			if(vc.ifValid(locationName)||vc.ifValid(name)) {
-				response.sendRedirect("Servlet_GetLocations");
-				// and error?
+				response.sendRedirect("locationList.jsp?info=lE1");				
+			}else {
+				location.setName(name);
+				location.setLocation(locationName);
+				location.setDeployment_date(Date.valueOf(dc.dateFormat(request.getParameter("deployment_date"))));
+				dao.newLocation(location);
+				response.sendRedirect("locationList.jsp?info=lIad1");
 			}
-			location.setName(name);
-			location.setLocation(locationName);
-			location.setDeployment_date(Date.valueOf(dc.dateFormat(request.getParameter("deployment_date"))));
-			dao.newLocation(location);
-			response.sendRedirect("Servlet_GetLocations");
 		}catch (Exception e) {
-			System.out.println("error");
+			response.sendRedirect("locationList.jsp?info=lEad1");
 		}		
 	}
 }

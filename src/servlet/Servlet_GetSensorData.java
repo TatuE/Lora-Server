@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.Dao_SensorData;
+import helper.ValueChecker;
 import model.SensorData;
 
 @WebServlet("/Servlet_GetSensorData")
@@ -25,28 +26,40 @@ public class Servlet_GetSensorData extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Servlet_GetSensorData.doGet()");
 		Dao_SensorData dao = new Dao_SensorData();
-		ArrayList<SensorData> sensorData;
-		String jsp;
+		ArrayList<SensorData> sensorData;	
 		try {
-			if(request.getParameter("device_placement_id")!=null) {
-				int id = Integer.parseInt(request.getParameter("device_placement_id"));
-				sensorData = dao.getSensorData(id);
-				jsp = "/locationSensorData.jsp";
-			}else {
-				sensorData = dao.getSensorData();
-				jsp = "/sensorData.jsp";
-			}				
+			sensorData = dao.getSensorData();
+			String jsp = "/sensorData.jsp";							
 			request.setAttribute("sensorData", sensorData);			
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(jsp);			
 			dispatcher.forward(request, response);			
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		
+		}		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Servlet_GetSensorData.doPost()");
+		Dao_SensorData dao = new Dao_SensorData();
+		ValueChecker vc = new ValueChecker();
+		ArrayList<SensorData> sensorData;
+		
+		try {
+			String locationName = request.getParameter("locationName");
+			String location = request.getParameter("location");
+			int status = Integer.parseInt(request.getParameter("status"));
+			
+			if(vc.ifValid(location)||vc.ifValid(locationName)) {
+				response.sendRedirect("sensorData.jsp?info=sdE1");
+			}else {
+				sensorData = dao.getSensorData(locationName, location, status);
+				String jsp = "/sensorData.jsp";							
+				request.setAttribute("sensorData", sensorData);			
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(jsp);			
+				dispatcher.forward(request, response);				
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}		
 	}
-
 }

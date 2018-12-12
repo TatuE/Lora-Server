@@ -18,9 +18,9 @@ public class Dao {
 
 	public Connection connect() throws Exception{
 		String JDBCDriver = "org.mariadb.jdbc.Driver";
-		String url = "jdbc:mariadb://<MaraDB-server>";
+		String url = "jdbc:mariadb://<mariadb-server>";
 		Class.forName(JDBCDriver);
-		con = DriverManager.getConnection(url,"<Username>", "<Password>");
+		con = DriverManager.getConnection(url,"username", "password");
 		return con;
 	}
 
